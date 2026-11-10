@@ -1,0 +1,791 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AiSeo \u2014 Enterprise Generative Engine Optimization API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/analyze": {
+      "post": {
+        "summary": "Full-Cycle Generative Engine Optimization Audit",
+        "description": "Asynchronously scrapes target URL, calculates 5D RRI score, generates Schema.org JSON-LD, simulates RAG citations, and produces crawler configs.",
+        "operationId": "analyze_url_endpoint_api_v1_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FullAnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/simulate": {
+      "post": {
+        "summary": "Simulate Multi-Intent RAG Queries",
+        "description": "Simulates cross-encoder ranking and generative citation probability across AI search engines.",
+        "operationId": "simulate_queries_endpoint_api_v1_simulate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/crawler-configs": {
+      "post": {
+        "summary": "Generate AI Crawler Configurations",
+        "description": "Generates production-grade robots.txt, llms.txt, and edge caching directives.",
+        "operationId": "crawler_configs_endpoint_api_v1_crawler_configs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrawlerConfigsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "summary": "Service Health Check",
+        "description": "Validates that the AiSeo API service and background workers are operational.",
+        "operationId": "health_check_endpoint_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AIQualitativeInsight": {
+        "properties": {
+          "executive_assessment": {
+            "type": "string",
+            "title": "Executive Assessment"
+          },
+          "missing_latent_entities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Latent Entities"
+          },
+          "suggested_bluf_hook": {
+            "type": "string",
+            "title": "Suggested Bluf Hook"
+          },
+          "provider_used": {
+            "type": "string",
+            "title": "Provider Used",
+            "description": "'gemini', 'openai', or 'heuristic_engine'",
+            "default": "heuristic_engine"
+          }
+        },
+        "type": "object",
+        "required": [
+          "executive_assessment",
+          "suggested_bluf_hook"
+        ],
+        "title": "AIQualitativeInsight"
+      },
+      "AnalysisRequest": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url",
+            "description": "Target webpage URL to audit and optimize for Generative Engine Search.",
+            "example": "https://en.wikipedia.org/wiki/Retrieval-augmented_generation"
+          },
+          "target_entity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Entity",
+            "description": "Primary brand or entity name to ground and evaluate for salience and anaphora.",
+            "example": "Retrieval-Augmented Generation"
+          },
+          "timeout_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 60.0,
+                "minimum": 5.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timeout Seconds",
+            "description": "HTTP request timeout in seconds.",
+            "default": 20
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "AnalysisRequest"
+      },
+      "CitationPrediction": {
+        "properties": {
+          "tier": {
+            "type": "string",
+            "title": "Tier",
+            "description": "High, Medium, Low, or Unlikely."
+          },
+          "primary_citation_probability": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Primary Citation Probability",
+            "description": "Estimated probability of landing primary [1] anchor."
+          },
+          "top_strengths": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Top Strengths"
+          },
+          "critical_vulnerabilities": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Critical Vulnerabilities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tier",
+          "primary_citation_probability"
+        ],
+        "title": "CitationPrediction"
+      },
+      "CrawlerConfigsResponse": {
+        "properties": {
+          "robots_txt": {
+            "type": "string",
+            "title": "Robots Txt"
+          },
+          "llms_txt": {
+            "type": "string",
+            "title": "Llms Txt"
+          },
+          "llms_full_txt": {
+            "type": "string",
+            "title": "Llms Full Txt"
+          },
+          "recommended_edge_rules": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Recommended Edge Rules"
+          }
+        },
+        "type": "object",
+        "required": [
+          "robots_txt",
+          "llms_txt",
+          "llms_full_txt"
+        ],
+        "title": "CrawlerConfigsResponse"
+      },
+      "DimensionScore": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Dimension title (e.g. BLUF Direct Answer, Semantic Density)."
+          },
+          "score": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "description": "Normalized score from 0 to 100."
+          },
+          "weight": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Weight",
+            "description": "Weight in composite RRI calculation."
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metrics",
+            "description": "Fine-grained algorithmic telemetry."
+          },
+          "recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Recommendations",
+            "description": "Targeted remediation steps."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "score",
+          "weight"
+        ],
+        "title": "DimensionScore"
+      },
+      "EngineCitationBreakdown": {
+        "properties": {
+          "engine_name": {
+            "type": "string",
+            "title": "Engine Name"
+          },
+          "estimated_inclusion_rate": {
+            "type": "number",
+            "title": "Estimated Inclusion Rate"
+          },
+          "primary_citation_rate": {
+            "type": "number",
+            "title": "Primary Citation Rate"
+          },
+          "risk_factors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Risk Factors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "engine_name",
+          "estimated_inclusion_rate",
+          "primary_citation_rate"
+        ],
+        "title": "EngineCitationBreakdown"
+      },
+      "FullAnalysisResponse": {
+        "properties": {
+          "request_url": {
+            "type": "string",
+            "title": "Request Url"
+          },
+          "target_entity": {
+            "type": "string",
+            "title": "Target Entity"
+          },
+          "scraped_summary": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Scraped Summary"
+          },
+          "geo_score": {
+            "$ref": "#/components/schemas/GeoScore"
+          },
+          "schema_recommendations": {
+            "$ref": "#/components/schemas/SchemaRecommendations"
+          },
+          "transformation": {
+            "$ref": "#/components/schemas/RAGTransformation"
+          },
+          "simulation": {
+            "$ref": "#/components/schemas/SimulationResult"
+          },
+          "crawler_configs": {
+            "$ref": "#/components/schemas/CrawlerConfigsResponse"
+          },
+          "analyzed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Analyzed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request_url",
+          "target_entity",
+          "scraped_summary",
+          "geo_score",
+          "schema_recommendations",
+          "transformation",
+          "simulation",
+          "crawler_configs"
+        ],
+        "title": "FullAnalysisResponse"
+      },
+      "GeoScore": {
+        "properties": {
+          "overall_score": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Overall Score",
+            "description": "Composite RAG-Readiness Index (RRI)."
+          },
+          "grade": {
+            "type": "string",
+            "title": "Grade",
+            "description": "Letter grade: A+, A, B, C, or F."
+          },
+          "citation_prediction": {
+            "$ref": "#/components/schemas/CitationPrediction"
+          },
+          "dimensions": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DimensionScore"
+            },
+            "type": "object",
+            "title": "Dimensions"
+          },
+          "actionable_checklist": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Actionable Checklist"
+          },
+          "ai_enhanced": {
+            "type": "boolean",
+            "title": "Ai Enhanced",
+            "description": "Whether LLM inference contributed to the qualitative report.",
+            "default": false
+          },
+          "ai_insight": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIQualitativeInsight"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "overall_score",
+          "grade",
+          "citation_prediction",
+          "dimensions",
+          "actionable_checklist"
+        ],
+        "title": "GeoScore"
+      },
+      "GroundedEntity": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "wikidata_url": {
+            "type": "string",
+            "title": "Wikidata Url"
+          },
+          "relevance_type": {
+            "type": "string",
+            "title": "Relevance Type",
+            "description": "'about' or 'mentions'.",
+            "default": "about"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "wikidata_url"
+        ],
+        "title": "GroundedEntity"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "QuerySimulationMetric": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "intent_type": {
+            "type": "string",
+            "title": "Intent Type"
+          },
+          "target_cited": {
+            "type": "boolean",
+            "title": "Target Cited"
+          },
+          "citation_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Citation Rank"
+          },
+          "rank_position_score": {
+            "type": "number",
+            "title": "Rank Position Score"
+          },
+          "attributed_token_share": {
+            "type": "number",
+            "title": "Attributed Token Share"
+          },
+          "survived_cross_encoder": {
+            "type": "boolean",
+            "title": "Survived Cross Encoder"
+          },
+          "simulated_answer_snippet": {
+            "type": "string",
+            "title": "Simulated Answer Snippet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "intent_type",
+          "target_cited",
+          "rank_position_score",
+          "attributed_token_share",
+          "survived_cross_encoder",
+          "simulated_answer_snippet"
+        ],
+        "title": "QuerySimulationMetric"
+      },
+      "RAGTransformation": {
+        "properties": {
+          "bluf_paragraph": {
+            "type": "string",
+            "title": "Bluf Paragraph"
+          },
+          "restructured_markdown": {
+            "type": "string",
+            "title": "Restructured Markdown"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/TransformedSection"
+            },
+            "type": "array",
+            "title": "Sections"
+          },
+          "llms_txt_snippet": {
+            "type": "string",
+            "title": "Llms Txt Snippet"
+          },
+          "anaphora_replacements_count": {
+            "type": "integer",
+            "title": "Anaphora Replacements Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "bluf_paragraph",
+          "restructured_markdown",
+          "llms_txt_snippet"
+        ],
+        "title": "RAGTransformation"
+      },
+      "SchemaRecommendations": {
+        "properties": {
+          "schema_type": {
+            "type": "string",
+            "title": "Schema Type",
+            "description": "Primary Schema type, e.g., 'TechArticle+Graph' or 'FAQPage'."
+          },
+          "jsonld_payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Jsonld Payload",
+            "description": "Interconnected @graph Schema.org JSON-LD object."
+          },
+          "formatted_script_tag": {
+            "type": "string",
+            "title": "Formatted Script Tag",
+            "description": "Ready-to-inject HTML script tag with JSON-LD."
+          },
+          "entities_grounded": {
+            "items": {
+              "$ref": "#/components/schemas/GroundedEntity"
+            },
+            "type": "array",
+            "title": "Entities Grounded"
+          },
+          "faq_count": {
+            "type": "integer",
+            "title": "Faq Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "schema_type",
+          "jsonld_payload",
+          "formatted_script_tag"
+        ],
+        "title": "SchemaRecommendations"
+      },
+      "SimulationResult": {
+        "properties": {
+          "target_url": {
+            "type": "string",
+            "title": "Target Url"
+          },
+          "target_entity": {
+            "type": "string",
+            "title": "Target Entity"
+          },
+          "total_queries_simulated": {
+            "type": "integer",
+            "title": "Total Queries Simulated"
+          },
+          "citation_success_rate": {
+            "type": "number",
+            "title": "Citation Success Rate"
+          },
+          "mean_rank_position_score": {
+            "type": "number",
+            "title": "Mean Rank Position Score"
+          },
+          "average_token_share": {
+            "type": "number",
+            "title": "Average Token Share"
+          },
+          "query_details": {
+            "items": {
+              "$ref": "#/components/schemas/QuerySimulationMetric"
+            },
+            "type": "array",
+            "title": "Query Details"
+          },
+          "engine_breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/EngineCitationBreakdown"
+            },
+            "type": "array",
+            "title": "Engine Breakdown"
+          },
+          "simulation_summary": {
+            "type": "string",
+            "title": "Simulation Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_url",
+          "target_entity",
+          "total_queries_simulated",
+          "citation_success_rate",
+          "mean_rank_position_score",
+          "average_token_share",
+          "simulation_summary"
+        ],
+        "title": "SimulationResult"
+      },
+      "TransformedSection": {
+        "properties": {
+          "heading": {
+            "type": "string",
+            "title": "Heading"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "is_table": {
+            "type": "boolean",
+            "title": "Is Table",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "heading",
+          "content"
+        ],
+        "title": "TransformedSection"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

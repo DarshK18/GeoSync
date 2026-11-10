@@ -1,0 +1,19 @@
+[project]
+name = "ai-seo"
+version = "1.0.0"
+description = "Generative Engine Optimization (GEO) API & Platform for Top AI Engine Rankings"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "fastapi>=0.162.2",
+    "google-generativeai>=0.8.6",
+    "httpx>=0.28.1",
+    "langchain>=1.4.9",
+    "openai>=3.48.0",
+    "pydantic>=2.14.3",
+    "pydantic-settings>=2.16.2",
+    "python-dotenv>=1.2.4",
+    "requests>=2.34.2",
+    "uvicorn>=0.54.0",
+]
