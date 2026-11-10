@@ -4,8 +4,8 @@ Defines type-safe data transfer objects between Backend and Next.js Frontend.
 """
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional, Union
+from pydantic import BaseModel, Field, field_validator
 
 
 class AnalysisRequest(BaseModel):
@@ -28,9 +28,19 @@ class AnalysisRequest(BaseModel):
 
 
 class HeadingItem(BaseModel):
-    level: str = Field(..., description="Heading level tag, e.g., 'h1', 'h2', 'h3'.")
+    level: Union[str, int] = Field(..., description="Heading level tag, e.g., 'h1', 'h2', 'h3'.")
     text: str = Field(..., description="Cleaned heading text.")
     is_question: bool = Field(False, description="Whether the heading is structured as an interrogative query.")
+
+    @field_validator("level", mode="before")
+    @classmethod
+    def normalize_level(cls, v: Any) -> str:
+        if isinstance(v, int):
+            return f"h{v}"
+        s = str(v).lower().strip()
+        if s.isdigit():
+            return f"h{s}"
+        return s
 
 
 class TableRecord(BaseModel):

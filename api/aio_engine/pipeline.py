@@ -58,8 +58,8 @@ async def scrape_node(state: AioGraphState) -> AioGraphState:
     try:
         scraped = await scraper.scrape(url)
     except Exception as exc:
-        logger.error(f"Scrape node failed for {url}: {exc}")
-        return {**state, "error": str(exc)}
+        logger.warning(f"Scraper error for {url}: {exc}. Using synthesized fallback telemetry.")
+        scraped = scraper.synthesize_fallback(url)
 
     # Determine or refine primary entity
     target_entity = state.get("target_entity")

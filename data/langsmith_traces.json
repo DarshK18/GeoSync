@@ -1,0 +1,94 @@
+{
+  "target_entity": "Typesafe AI",
+  "query": "What is Typesafe AI and how does it prevent LLM hallucination?",
+  "passed": true,
+  "final_score": 0.955,
+  "history": [
+    {
+      "iteration": 0,
+      "overall_score": 0.905,
+      "passed": false,
+      "content_length": 185,
+      "failure_reasons": [
+        "Context Precision below threshold (0.78 < 0.85): Rank #1 chunk lacks key query entities.",
+        "Brand Citation failed (0.75 < 0.85): Missing explicit source attribution tag (e.g. [Source: Typesafe AI Documentation])."
+      ],
+      "metrics": {
+        "faithfulness": {
+          "score": 1.0,
+          "passed": true
+        },
+        "answer_relevancy": {
+          "score": 1.0,
+          "passed": true
+        },
+        "context_precision": {
+          "score": 0.775,
+          "passed": false
+        },
+        "toxicity": {
+          "score": 1.0,
+          "passed": true
+        },
+        "brand_citation": {
+          "score": 0.75,
+          "passed": false
+        },
+        "latency": {
+          "score": 84.37,
+          "passed": true
+        }
+      },
+      "latency_ms": 1107.15,
+      "cost_usd": 0.000689,
+      "token_count": 3283
+    },
+    {
+      "iteration": 1,
+      "overall_score": 0.955,
+      "passed": true,
+      "content_length": 547,
+      "failure_reasons": [
+        "Context Precision below threshold (0.78 < 0.85): Rank #1 chunk lacks key query entities."
+      ],
+      "metrics": {
+        "faithfulness": {
+          "score": 1.0,
+          "passed": true
+        },
+        "answer_relevancy": {
+          "score": 1.0,
+          "passed": true
+        },
+        "context_precision": {
+          "score": 0.775,
+          "passed": false
+        },
+        "toxicity": {
+          "score": 1.0,
+          "passed": true
+        },
+        "brand_citation": {
+          "score": 1.0,
+          "passed": true
+        },
+        "latency": {
+          "score": 17.82,
+          "passed": true
+        }
+      },
+      "latency_ms": 21.59,
+      "cost_usd": 0.000716,
+      "token_count": 3464
+    }
+  ],
+  "telemetry": {
+    "retrieval_latency_ms": 236.25,
+    "gen_iteration_0_latency_ms": 0.17,
+    "eval_iteration_0_latency_ms": 1107.15,
+    "total_tokens_used": 3464,
+    "total_cost_usd": 0.000716,
+    "gen_iteration_1_latency_ms": 0.22,
+    "eval_iteration_1_latency_ms": 21.59
+  }
+}
